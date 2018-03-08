@@ -1,6 +1,6 @@
 ## RVDB - The Reference Virus Database (RVDB)
 
-The RVDB (Reference Virus DataBase) is a collection of all known viral, viral-related, and viral-like sequences, except bacterial viruses. The RVDB is updated directly from the NCBI RefSeq, NCBI GenBank and NCBI TPA sequences collections. The files contained in this directory contain instructions for performing an update of the RVDB, as well as characterizing the resulting sequences by the following categories: exogenous viral, endogenous nonretroviral, endogenous retroviral, LTR-retrotransposon, and unassigned viral genes / fragments. Further instructions for performing the RVDB update are provided in the Supplementary Methods S1 document, while instructions for characterization are provided in the Supplementary Methods S2 document. The “RVDB_characterization.py” python script is used for the characterization; all other python scripts are used for updating RVDB. The manuscript describing RVDB is currently under review (Norman Goodacre, Aisha Aljanahi, Subhiksha Nandakumar, Mike Mikailov, Arifa S. Khan. A reference viral database (RVDB) to enhance bioinformatics analysis of high throughput sequencing for novel virus detection).
+The RVDB (Reference Virus DataBase) is a collection of all known viral, viral-related, and viral-like sequences, except bacterial viruses. The RVDB is updated directly from the NCBI RefSeq, NCBI GenBank and NCBI TPA sequences collections. The files contained in this directory contain instructions for performing an update of the RVDB, as well as characterizing the resulting sequences by the following categories: exogenous viral, endogenous nonretroviral, endogenous retroviral, LTR-retrotransposon, and unassigned viral genes / fragments. Further instructions for performing the RVDB update are provided in the "Instructions for Updating RVDB.docx" document, while instructions for characterization are provided in the "Instructions for Characterizing RVDB Sequences.docx". The “RVDB_characterization.py” python script is used for the characterization; all other python scripts are used for updating RVDB. The manuscript describing RVDB is currently under review (Norman Goodacre, Aisha Aljanahi, Subhiksha Nandakumar, Mike Mikailov, Arifa S. Khan. A reference viral database (RVDB) to enhance bioinformatics analysis of high throughput sequencing for novel virus detection).
 
 
 ## Instructions for Characterizing RVDB Sequences.docx
@@ -48,6 +48,7 @@ Runs checkpoint2, which verifies that all GenBank division files were unzipped a
 Semantic screening for the RVDB. Contains three parts: a positive semantic screen to pull in potentially-viral sequences, a size/mirna screen to remove mirnas and sequences <50 b.p. in length, and a negative semantic screen to remove all false-positive sequences pulled in by the positive screen. 
 
 ## Scanner.py
+
 This is a modified version of the Scanner.py script that can simply be copied and pasted into the same directory as the original Scanner.py script (overwrite previous). To avoid having to change additional lines in calling scripts to accommodate a different name for Scanner.py, the name of Scanner.py was not changed. The modifications should not hinder any existing functionality of the script, so it can safely be used in place of the original. The modified Scanner.py contains a try/except block in two places, to correct for an error that occurred in a small number of entries, related to the ‘Structured Comments’ metadata. In a very small number of cases, it was noted that the standard Scanner.py script tries to extract the ‘Structured Comments’ metadata, when this metadata is in fact not present. 
 
 ## create_U-RVDB.py
@@ -59,4 +60,5 @@ Takes all .fasta files containing sequences that are either RefSeq eukaryotic vi
 Takes the cluster repressentatives from the CD-HIT-EST clustering output (.clstr file) and uses them as a filter to extract a subset of the unclustered RVDB, resulting in the clustered RVDB, named C-RVDBv$version.fasta. 
 
 ## Questions/Comments
+
 If you have any questions or comments regarding RVDB nucleotidic databases, please contact Arifa Khan (Arifa.Khan@fda.hhs.gov)
