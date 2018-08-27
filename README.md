@@ -58,7 +58,7 @@ This is a modified version of the Scanner.py script that can simply be copied an
 
 Takes all .fasta files containing sequences that are either RefSeq eukaryotic viral or GenBank/TPA that have passed all three parts of the SEM-R screen, and combines them into one file - the unclustered RVDB, named U-RVDBv$version.fasta. 
 
-##prep_manual_review.py
+## prep_manual_review.py
 
 Collects all sequences that have passed all three parts of the SEM-R_PIPE.py screen and takes accessions of these “passing” sequences and compares them to accessions from the previous version of the U-RVDB, and finally outputs two sheets: one with headers of “missing” sequences in the update, or those that were present in the previous version but not the update, and one with headers of “new” sequences in the update, or those that are present in the update but were not present in the previous version.
 
