@@ -1,6 +1,4 @@
 import re
-wdir='F:\\VDBv10.2'
-outdir=wdir
 
 ##################################################################################################
 ########## Positive keywords, positive regular expressions.                            ###########
@@ -92,10 +90,10 @@ vkws=['viral','virales','viridae','virion','viroid','virus']
 ########## i.e. retroelements/retrotransposons, endogenous retroviruses,               ###########
 ########## endogenous viruses, and other (exogenous) viruses                           ###########
 ##################################################################################################
-def characterize_by_biological_category(infilename,tofilter,filterset):
+def characterize_by_biological_category(wdir,infilename,tofilter,filterset):
     cdict=dict()
     c=0
-    inf=open(infilename)
+    inf=open(wdir+'\\'+infilename)
     entries=[]
     for i,line in enumerate(inf):
         if line.startswith('>acc'):
@@ -165,6 +163,69 @@ def characterize_by_biological_category(infilename,tofilter,filterset):
     outf.write(str(len(cdict['other']))+' unclassified viral gene/fragment sequences\n')
     outf.close()
     return cdict
+
+##################################################################################################
+########## Writes output file for biological categories                                ###########
+##################################################################################################
+def write_characterization_output(wdir,rvdb_filename,cdict):
+    outf_ex=open(wdir+'\\'+rvdb_filename+'.EX.headers.txt','w')
+    outf_enrv=open(wdir+'\\'+rvdb_filename+'.ENRV.headers.txt','w')
+    outf_erv=open(wdir+'\\'+rvdb_filename+'.ERV.headers.txt','w')
+    outf_retro=open(wdir+'\\'+rvdb_filename+'.LTR-RETRO.headers.txt','w')
+    outf_other=open(wdir+'\\'+rvdb_filename+'.UNASSIGNED.headers.txt','w')
+    outf_ex.write('\n'.join(cdict['v']))
+    outf_enrv.write('\n'.join(cdict['ev']))
+    outf_erv.write('\n'.join(cdict['er']))
+    outf_retro.write('\n'.join(cdict['retro']))
+    outf_other.write('\n'.join(cdict['other']))
+    outf_ex.close()
+    outf_enrv.close()
+    outf_erv.close()
+    outf_retro.close()
+    outf_other.close()
+
+##################################################################################################
+########## Retrieves characeterized sequences                                          ###########
+##########   (i.e. output of write_characterization_output)                            ###########
+##################################################################################################
+def get_characterized_output(wdir,rvdb_filename):
+    ex_fn=wdir+'\\'+rvdb_filename+'.EX.headers.txt'
+    ex_inf=open(ex_fn)
+    enrv_fn=wdir+'\\'+rvdb_filename+'.ENRV.headers.txt'
+    enrv_inf=open(enrv_fn)
+    erv_fn=wdir+'\\'+rvdb_filename+'.ERV.headers.txt'
+    erv_inf=open(erv_fn)
+    retro_fn=wdir+'\\'+rvdb_filename+'.LTR-RETRO.headers.txt'
+    retro_inf=open(retro_fn)
+    other_fn=wdir+'\\'+rvdb_filename+'.UNASSIGNED.headers.txt'
+    other_inf=open(other_fn)
+    cdict2=dict()
+    ex_heads=ex_inf.read().strip().split('\n')
+    ex_inf.close()
+    enrv_heads=enrv_inf.read().strip().split('\n')
+    enrv_inf.close()
+    erv_heads=erv_inf.read().strip().split('\n')
+    erv_inf.close()
+    retro_heads=retro_inf.read().strip().split('\n')
+    retro_inf.close()
+    other_heads=other_inf.read().strip().split('\n')
+    other_inf.close()
+    for ex_head in ex_heads:
+        acc=ex_head.split('|')[2]
+        cdict2[acc]='EX'
+    for enrv_head in enrv_heads:
+        acc=enrv_head.split('|')[2]
+        cdict2[acc]='ENRV'
+    for erv_head in erv_heads:
+        acc=erv_head.split('|')[2]
+        cdict2[acc]='ERV'
+    for retro_head in retro_heads:
+        acc=retro_head.split('|')[2]
+        cdict2[acc]='LTR-RETRO'
+    for other_head in other_heads:
+        acc=other_head.split('|')[2]
+        cdict2[acc]='OTHER'
+    return cdict2
 
 #####################################################################################################
 ########## Auxiliary functions for main function characterize_creps_by_biological_category ##########
@@ -287,7 +348,7 @@ homedir=sys.argv[1]
 datetag=sys.argv[2]
 currentvs=sys.argv[3]
 wdir=homedir+'\\'+'RVDBv'+currentvs
-rvdb_filename=wdir+'\\'+sys.argv[4]
+rvdb_filename=sys.argv[4]
 print rvdb_filename
 filterset_filename=sys.argv[5]
 from sequence_record_functions_PIPE import get_accs_flatfile as getaccs
@@ -297,5 +358,6 @@ try:
 except IOError:
     filterset=set([])
     tofilter=False
-cdict=characterize_by_biological_category(rvdb_filename,tofilter,filterset)
+cdict=characterize_by_biological_category(wdir,rvdb_filename,tofilter,filterset)
+write_characterization_output(wdir,rvdb_filename,cdict)
 
