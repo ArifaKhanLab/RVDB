@@ -247,7 +247,7 @@ def negative_rules(description_s):
                 nonviral.append('envelope protein odv')
     if ' ty1 ' in ds or ' ty 1 ' in ds or ' ty2 ' in ds or ' ty 2 ' in ds or ' ty3 ' in ds or ' ty 3 ' in ds:
         if 'tabanus yao' in ds:
-            nonviral.append('tabanus yap ty')
+            nonviral.append('tabanus yao ty')
     if ' env ' in ds:
         if 'uncultured trypanosome' in ds:
             nonviral.append('uncultured trypanosome isolate *-env')
