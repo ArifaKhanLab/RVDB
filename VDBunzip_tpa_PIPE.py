@@ -5,7 +5,7 @@ homedir=sys.argv[1]
 datetag=sys.argv[2]
 currentvs=sys.argv[3]
 wdir=homedir+'\\'+'RVDBv'+currentvs
-tpadir=wdir+'\\'+'TPA_raw_data_dec.2017'
+tpadir=wdir+'\\'+'TPA_raw_data_'+datetag
 print tpadir
 tpafiletag=sys.argv[4]
 import os
@@ -18,7 +18,7 @@ unzipfilenames=[]
 for fn in os.listdir(tpadir):
     if not tpafiletag in fn or not fn.endswith('.gz'):
         continue
-    if not 'con_' in fn:
+    if not fn=='tpa_cu.fsa_nt.gz':
         continue
     print fn
     fh = gzip.open(tpadir+'\\'+fn, 'rb')

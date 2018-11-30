@@ -105,7 +105,7 @@ currentvs=sys.argv[3]
 wdir=homedir+'\\RVDBv'+currentvs
 refseqdir=wdir+'\\RefSeq_raw_data_'+date
 sys.path.append(homedir+'\\TOOLBOX')
-from sequence_record_functions_PIPE import get_gis_flatfile as getaccs
+from sequence_record_functions_PIPE import get_accs_flatfile as getaccs
 from sequence_record_functions_PIPE import collate_dict_allvalues as colldict
 logdir=refseqdir+'\\'+'log'
 logf=open(logdir+'\\'+'mapping_refseq_genbank.txt','w')

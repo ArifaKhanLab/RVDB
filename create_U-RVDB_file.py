@@ -1,9 +1,8 @@
 import sys
-sys.path.append('F:\\TOOLBOX')
-from sequence_record_functions import get_gis_flatfile as getids
-from sequence_record_functions import get_accs_fastafile as getaccs
-from sequence_record_functions import get_filenames as getfns
-from sequence_record_functions import join_sets as joinsets
+sys.path.append('E:\\TOOLBOX')
+from sequence_record_functions_PIPE import get_accs_flatfile as getaccs
+from sequence_record_functions_PIPE import get_accs_fastafile as getaccsfa
+from sequence_record_functions_PIPE import get_filenames as getfns
 homedir=sys.argv[1]
 datetag=sys.argv[2]
 currentvs=sys.argv[3]
@@ -13,17 +12,19 @@ gbdir=wdir+'\\'+'GenBank_raw_data_'+datetag
 refseqdir=wdir+'\\'+'RefSeq_raw_data_'+datetag
 tpadir=wdir+'\\'+'TPA_raw_data_'+datetag
 gb_negkwdir=gbdir+'\\'+'negkw_out_'+datetag
-tpa_negkwdir=gbdir+'\\'+'negkw_out_'+datetag
+tpa_negkwdir=tpadir+'\\'+'negkw_out_'+datetag
+dupaccsfn=refseqdir+'\\'+'refseq_viral_originalaccs.txt'
 
 postags=['OK','VRL']
-negtags=['FLAG','AMB']
+negtags=['FLAG','AMB','headers']
 gbfns=getfns(gb_negkwdir,postags,negtags)
 tpafns=getfns(tpa_negkwdir,postags,negtags)
 allfns=[]
 allfns.append(refseqdir+'\\'+'viral.genomic.eukviral.fasta')
 allfns.extend(gbfns)
 allfns.extend(tpafns)
-removeaccs=getids(wdir+'\\'+removeaccsfn)
+removeaccs=getaccs(wdir+'\\'+removeaccsfn)
+dupaccs=getaccs(dupaccsfn)
 outf=open(wdir+'\\'+'U-RVDBv'+currentvs+'.fasta','w')
 c=0
 match=False
@@ -33,7 +34,7 @@ for fn in allfns:
     for line in inf:
         if line.startswith('>acc'):
             acc=line.split('|')[2].split('.')[0]
-            if acc in removeaccs or acc in written:
+            if acc in removeaccs or acc in dupaccs or acc in written:
                 match=False
             else:
                 match=True

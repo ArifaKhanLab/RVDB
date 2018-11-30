@@ -16,10 +16,28 @@ def get_accs_fastafile(fasta_filename):
     inf=open(fasta_filename)
     for i,line in enumerate(inf):
         if line.startswith('>'):
-            acc=line.split('|')[1]
+            acc=line.split('|')[2]
             accs.add(acc)
     inf.close()
     return accs
+
+##### Given a directory, collects all filenames containing any
+##### positive keyword tags, and lacking all negative keyword tags
+def get_filenames(targetdir,postags,negtags):
+    outfns=[]
+    import os
+    for fn in os.listdir(targetdir):
+        match=False
+        for postag in postags:
+            if postag in fn:
+                match=True
+        for negtag in negtags:
+            if negtag in fn:
+                match=False
+        if match:
+            outfns.append(targetdir+'\\'+fn)
+    return outfns
+
 
 ##################################################################################################
 ########## Simple function to extract headers from .fasta file                         ###########
@@ -46,9 +64,10 @@ def get_vdb_desc(vdb_filename):
     descs=dict()
     inf=open(vdb_filename)
     for i,line in enumerate(inf):
-        if line.startswith('>gi'):
-            acc=line.split('|')[1]
-            desc='|'.join(line.strip().split('|')[4:])
+        if line.startswith('>acc'):
+            sl=line.strip().split('|')
+            acc=sl[2]
+            desc='|'.join(line.strip().split('|')[3:])
             descs[acc]=desc
     return descs
 
@@ -145,6 +164,26 @@ def fetch_seqs(fastafilename,filterset):
                 slen=len(seq)
                 sdict[acc]=[seq,slen]
     return sdict
+
+##### returns the refseq qand neighbor accessions as sets
+##### RVDBv11.3 and higher
+def get_refseq_neighbor_acc(rvdb_filename):
+    refseq=set([])
+    neighbor=set([])
+    inf=open(rvdb_filename)
+    for line in inf:
+        if line.startswith('>acc'):
+            sl=line.split('|')
+            source=sl[1]
+            acc=sl[2]
+            if source=='REFSEQ':
+                refseq.add(acc)
+            if source=='NEIGHBOR':
+                neighbor.add(acc)
+    inf.close()
+    return [refseq,neighbor]
+
+
 
 ##### Calculates length of all sequences in input fasta file and writes output
 def calculate_seqlength(infastafilename):

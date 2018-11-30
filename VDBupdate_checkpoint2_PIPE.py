@@ -22,7 +22,6 @@ fnnumfinder=re.compile('[0-9]+.')
 gb_update_counts=dict()
 ##### This is the first of three output files. This prints the real-time progress of the unzipping, file per file,
 ##### and also prints out the total file count and seqs count per division,each time a file is unzipped
-print logfolder
 outf=open(logdir+'\\'+'RVDBv'+currentvs+'_checkpt2a.log','w')
 unzipfns=[]
 
@@ -49,7 +48,7 @@ for f,fn in enumerate(os.listdir(gbdir)):
     except KeyError:
         existing_gbtype=dict()
     existing_fnnum=0
-    inf=open(wdir+'\\'+fn)
+    inf=open(gbdir+'\\'+fn)
     for i,line in enumerate(inf):
         if line.startswith('>acc'):
             existing_fnnum+=1
@@ -83,7 +82,7 @@ for f,fn in enumerate(os.listdir(gbdir)):
 
 ##### This is the second log file. This file prints out a summary of the seqs unzipped
 ##### with just the file name tag and # seqs (division+fnnum    *count*, e.x. GBENV12     82356)
-outf=open(logdir+'\\'+logfolder+'\\'+currentvs+'_checkpt2b.log','w')
+outf=open(logdir+'\\'+currentvs+'_checkpt2b.log','w')
 cdict2=dict()
 for div in sorted(gb_update_counts.keys()):
     bydiv=gb_update_counts[div]
@@ -95,7 +94,7 @@ for div in sorted(gb_update_counts.keys()):
 outf.close()
 
 ##### Collects counts per division / per file (checkpt2b.log info)
-inf=open(logdir+'\\'+logfolder+'\\'+currentvs+'_checkpt2b.log')
+inf=open(logdir+'\\'+currentvs+'_checkpt2b.log')
 cdict2=dict()
 for i,line in enumerate(inf):
     fntag,c=line.strip().split('\t')
@@ -117,7 +116,7 @@ for line in intext.split('\n'):
 ##### Note that, since the "for" loop reads in keys from cdict2, this procedure will not
 ##### verify whether all the files are present, only whether files present (i.e. unzipped)
 ##### contain the full, correct number of seqs
-outf=open(logdir+'\\'+logfolder+'\\'+currentvs+'_checkpt2c.log','w')
+outf=open(logdir+'\\'+currentvs+'_checkpt2c.log','w')
 for fntag in sorted(cdict2.keys()):
     c2=cdict2[fntag]
     try:
@@ -153,7 +152,7 @@ for fntag in sorted(cdict2.keys()):
         existing=0
     existing+=c
     bydiv2[div]=existing
-outf=open(logdir+'\\'+logfolder+'\\'+currentvs+'_checkpt2d.log','w')
+outf=open(logdir+'\\'+currentvs+'_checkpt2d.log','w')
 for div in sorted(bydiv1.keys()):
     c1=bydiv1[div]
     try:
